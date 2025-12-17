@@ -22,7 +22,8 @@ import { UsersModule } from './users/users.module';
       entities: [User, Murmur, Follow, Like],
       synchronize: true,
     }),
-
+     MurmursModule,
+     UsersModule,
     TypeOrmModule.forFeature([User, Murmur, Follow, Like]),
   ],
   controllers: [AppController],
