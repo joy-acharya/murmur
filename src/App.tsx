@@ -11,7 +11,7 @@ export default function App() {
         <Link to="/">Timeline</Link>
         <Link to="/me">My Profile</Link>
         <Link to="/users/2">User 2</Link>
-        <Link to="/murmurs/1">Murmur 1</Link>
+        <Link to="/murmurs/2">Murmur 1</Link>
       </nav>
 
       <Routes>

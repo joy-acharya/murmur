@@ -17,6 +17,10 @@ export default function TimelinePage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  // 🔹 Create murmur state
+  const [text, setText] = useState("");
+  const [posting, setPosting] = useState(false);
+
   async function load() {
     setLoading(true);
     try {
@@ -25,6 +29,21 @@ export default function TimelinePage() {
       setTotal(res.data.total);
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Create murmur
+  async function createMurmur() {
+    if (!text.trim()) return;
+
+    setPosting(true);
+    try {
+      await http.post("/murmurs", { text });
+      setText("");
+      setPage(1);
+      await load();
+    } finally {
+      setPosting(false);
     }
   }
 
@@ -62,11 +81,32 @@ export default function TimelinePage() {
     <div>
       <h2>Timeline</h2>
 
+      {/* Create Murmur UI */}
+      <div style={{ marginBottom: 16 }}>
+        <textarea
+          placeholder="What's happening?"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          rows={3}
+          style={{ width: "100%", padding: 8 }}
+        />
+        <button
+          onClick={createMurmur}
+          disabled={posting || !text.trim()}
+          style={{ marginTop: 8 }}
+        >
+          {posting ? "Posting..." : "Post Murmur"}
+        </button>
+      </div>
+
       {loading ? <p>Loading...</p> : null}
 
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {items.map((m) => (
-          <div key={m.id} style={{ padding: 12, border: "1px solid #ddd", borderRadius: 8 }}>
+          <div
+            key={m.id}
+            style={{ padding: 12, border: "1px solid #ddd", borderRadius: 8 }}
+          >
             <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
               <Link to={`/murmurs/${m.id}`} style={{ fontWeight: 600 }}>
                 Murmur #{m.id}
